@@ -4,34 +4,24 @@
 # SPDX-License-Identifier: BSD 2-Clause License
 #
 
-"""Interruptible voice bot using Gnani Vachana STT + TTS on Pipecat.
+"""Voice bot with Gnani Vachana STT + TTS.
 
-Demonstrates real-time Indian-language speech recognition and synthesis
-via the ``pipecat-gnani`` package (``pipecat.services.gnani`` namespace).
+Same pipeline as ``foundational/07x-interruptible-gnani.py``, placed alongside
+other provider examples under ``examples/voice/``.
 
 Install::
 
     pip install "pipecat-ai[gnani,daily,groq,silero,runner,webrtc,websocket]"
 
+Run::
+
+    python examples/voice/voice-gnani.py -t webrtc
+    # open http://localhost:7860/client
+
 Environment::
 
     GNANI_API_KEY=...
     GROQ_API_KEY=...
-
-Run::
-
-    uv run python examples/foundational/07x-interruptible-gnani.py -t webrtc
-
-TTS / STT variants (swap imports in ``run_bot``):
-
-- ``GnaniHttpSTTService`` — REST STT (requires ``aiohttp_session``)
-- ``GnaniSTTService`` — WebSocket streaming STT (default below)
-- ``GnaniHttpTTSService`` — REST TTS (requires ``aiohttp_session``)
-- ``GnaniSSETTSService`` — SSE streaming TTS (requires ``aiohttp_session``)
-- ``GnaniTTSService`` — WebSocket streaming TTS with interruption (default below)
-
-Voices: Pranav, Kaveri, Shubhra, Deepak
-Docs: https://docs.gnani.ai/api/introduction/introduction
 """
 
 import os
@@ -61,8 +51,6 @@ from pipecat.workers.runner import WorkerRunner
 
 load_dotenv(override=True)
 
-# We use lambdas to defer transport parameter creation until the transport
-# type is selected at runtime.
 transport_params = {
     "eval": lambda: EvalTransportParams(
         audio_in_enabled=True,
@@ -84,13 +72,10 @@ transport_params = {
 
 
 async def run_bot(transport: BaseTransport, runner_args: RunnerArguments):
-    logger.info("Starting interruptible bot with Gnani STT + TTS")
+    logger.info("Starting bot with Gnani STT + TTS")
 
     gnani_api_key = os.environ["GNANI_API_KEY"]
 
-    # ── STT: WebSocket streaming (real-time, built-in VAD events) ──────────
-    # language options: Language.AS_IN, BN_IN, EN_IN, GU_IN, HI_IN, KN_IN,
-    #   ML_IN, MR_IN, OR_IN, PA_IN, TA_IN, TE_IN
     stt = GnaniSTTService(
         api_key=gnani_api_key,
         sample_rate=16000,
@@ -99,9 +84,6 @@ async def run_bot(transport: BaseTransport, runner_args: RunnerArguments):
         ),
     )
 
-    # ── TTS: WebSocket streaming (lowest latency, supports interruption) ───
-    # voice options: Pranav, Kaveri, Shubhra, Deepak
-    # see https://docs.gnani.ai/api/TTS/tts-sse#available-voices
     tts = GnaniTTSService(
         api_key=gnani_api_key,
         sample_rate=16000,
@@ -115,9 +97,10 @@ async def run_bot(transport: BaseTransport, runner_args: RunnerArguments):
         settings=GroqLLMService.Settings(
             model="llama-3.1-8b-instant",
             system_instruction=(
-                "You are a helpful voice assistant powered by Gnani Vachana. "
-                "Your responses will be spoken aloud, so keep them concise and "
-                "conversational. Do not use emojis, markdown, or special characters."
+                "You are a helpful assistant in a voice conversation powered by "
+                "Gnani Vachana. Your responses will be spoken aloud, so avoid emojis, "
+                "bullet points, or other formatting that can't be spoken. "
+                "Respond to what the user said in a creative, helpful, and brief way."
             ),
         ),
     )
@@ -153,10 +136,7 @@ async def run_bot(transport: BaseTransport, runner_args: RunnerArguments):
     async def on_client_connected(transport, client):
         logger.info("Client connected")
         context.add_message(
-            {
-                "role": "developer",
-                "content": "Greet the user and offer to help in a friendly way.",
-            }
+            {"role": "developer", "content": "Please introduce yourself to the user."}
         )
         await worker.queue_frames([LLMRunFrame()])
 

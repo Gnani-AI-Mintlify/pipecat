@@ -67,6 +67,8 @@ suite:
     scenarios: [capital_question]
   - bot: voice/voice-gladia-vad.py
     scenarios: [capital_question]
+  - bot: voice/voice-gnani.py
+    scenarios: [capital_question]
   - bot: voice/voice-google.py
     scenarios: [capital_question]
   - bot: voice/voice-google-audio-in.py

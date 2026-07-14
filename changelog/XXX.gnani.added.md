@@ -11,8 +11,11 @@
 
   **Features:**
   - Support for 12 Indian languages (Assamese, Bengali, English-India, Gujarati, Hindi, Kannada, Malayalam, Marathi, Odia, Punjabi, Tamil, Telugu)
-  - 10 voices: Karan, Simran, Nara, Riya, Viraj, Raju, Pranav, Kaveri, Shubhra, Deepak
+  - 4 voices: Pranav, Kaveri, Shubhra, Deepak (see https://docs.gnani.ai/api/TTS/tts-sse#available-voices)
   - Dynamic language switching via `set_language()`
   - Built-in metrics (TTFB and processing time)
   - Traced transcription (`@traced_stt`) and synthesis (`@traced_tts`)
-  - Complete foundational example at `examples/foundational/07x-interruptible-gnani.py`
+  - Complete foundational example at `examples/foundational/07x-interruptible-gnani.py` (WebSocket STT + interruptible WebSocket TTS)
+  - Voice provider example at `examples/voice/voice-gnani.py`
+  - Smoke integration at `scripts/smoke-gnani/` (boot check, unit tests, eval scenarios)
+  - Release eval entry for `voice-gnani.py` in `scripts/release-evals/manifest.yaml`

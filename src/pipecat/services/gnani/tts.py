@@ -15,8 +15,8 @@ Services:
 - GnaniSSETTSService — SSE streaming synthesis (lower latency)
 - GnaniTTSService — WebSocket streaming synthesis with interruption handling
 
-Voices: Karan (default), Simran, Nara, Riya, Viraj, Raju, Pranav, Kaveri,
-Shubhra, Deepak.
+Voices: Pranav (default), Kaveri, Shubhra, Deepak.
+See https://docs.gnani.ai/api/TTS/tts-sse#available-voices
 
 API docs: https://docs.gnani.ai/api/TTS/tts-inference
 """
