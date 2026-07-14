@@ -9,14 +9,18 @@
 Demonstrates real-time Indian-language speech recognition and synthesis
 via the ``pipecat-gnani`` package (``pipecat.services.gnani`` namespace).
 
+Prerequisites::
+
+    You need a Gnani API key. `Gnani APIs <https://app.gnani.ai/voice>`_ have this.
+
+    Set your credentials as environment variables::
+
+        export GNANI_API_KEY="your-api-key"
+        export GROQ_API_KEY="your-groq-api-key"
+
 Install::
 
     pip install "pipecat-ai[gnani,daily,groq,silero,runner,webrtc,websocket]"
-
-Environment::
-
-    GNANI_API_KEY=...
-    GROQ_API_KEY=...
 
 Run::
 

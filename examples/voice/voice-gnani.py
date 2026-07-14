@@ -9,6 +9,15 @@
 Same pipeline as ``foundational/07x-interruptible-gnani.py``, placed alongside
 other provider examples under ``examples/voice/``.
 
+Prerequisites::
+
+    You need a Gnani API key. `Gnani APIs <https://app.gnani.ai/voice>`_ have this.
+
+    Set your credentials as environment variables::
+
+        export GNANI_API_KEY="your-api-key"
+        export GROQ_API_KEY="your-groq-api-key"
+
 Install::
 
     pip install "pipecat-ai[gnani,daily,groq,silero,runner,webrtc,websocket]"
@@ -17,11 +26,6 @@ Run::
 
     python examples/voice/voice-gnani.py -t webrtc
     # open http://localhost:7860/client
-
-Environment::
-
-    GNANI_API_KEY=...
-    GROQ_API_KEY=...
 """
 
 import os

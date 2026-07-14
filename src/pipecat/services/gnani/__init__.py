@@ -9,6 +9,14 @@
 Re-exports services from the ``pipecat-gnani`` package under the
 ``pipecat.services.gnani`` namespace.
 
+Prerequisites::
+
+    You need a Gnani API key. `Gnani APIs <https://app.gnani.ai/voice>`_ have this.
+
+    Set your credentials as environment variables::
+
+        export GNANI_API_KEY="your-api-key"
+
 STT services:
 
 - GnaniHttpSTTService — REST-based file transcription (requires VAD)
