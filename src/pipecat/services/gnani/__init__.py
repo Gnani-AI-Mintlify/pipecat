@@ -28,16 +28,20 @@ TTS services:
 - GnaniSSETTSService — SSE streaming text-to-speech (lower latency)
 - GnaniTTSService — WebSocket streaming synthesis with interruption handling
 
-Voices: Pranav (default), Kaveri, Shubhra, Deepak.
+Voices: Pranav (default), Kaveri, Shubhra, Deepak for timbre-v2.0; 42 voices for timbre-v2.5.
 See https://docs.gnani.ai/api/TTS/tts-sse#available-voices
 
 API docs: https://docs.gnani.ai/api/introduction/introduction
 """
 
 from pipecat_gnani import (
+    DEFAULT_MODEL,
     STT_FORMAT_TRANSCRIBE,
     STT_FORMAT_VERBATIM,
+    SUPPORTED_TTS_LANGUAGES,
     SUPPORTED_VOICES,
+    TIMBRE_V20_VOICES,
+    TIMBRE_V25_VOICES,
     GnaniHttpSTTService,
     GnaniHttpSTTSettings,
     GnaniHttpTTSService,
@@ -51,6 +55,13 @@ from pipecat_gnani import (
 )
 
 __all__ = [
+    "DEFAULT_MODEL",
+    "STT_FORMAT_TRANSCRIBE",
+    "STT_FORMAT_VERBATIM",
+    "SUPPORTED_TTS_LANGUAGES",
+    "SUPPORTED_VOICES",
+    "TIMBRE_V20_VOICES",
+    "TIMBRE_V25_VOICES",
     "GnaniHttpSTTService",
     "GnaniHttpSTTSettings",
     "GnaniHttpTTSService",
@@ -61,7 +72,4 @@ __all__ = [
     "GnaniSTTSettings",
     "GnaniTTSService",
     "GnaniTTSSettings",
-    "STT_FORMAT_TRANSCRIBE",
-    "STT_FORMAT_VERBATIM",
-    "SUPPORTED_VOICES",
 ]

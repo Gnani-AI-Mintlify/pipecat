@@ -12,6 +12,7 @@ All constants, language maps, and helper functions originate in
 """
 
 from pipecat_gnani._common import (  # noqa: F401
+    DEFAULT_MODEL,
     GNANI_STT_REST_URL,
     GNANI_STT_WS_URL,
     GNANI_TTS_REST_URL,
@@ -29,15 +30,20 @@ from pipecat_gnani._common import (  # noqa: F401
     SUPPORTED_CONTAINERS,
     SUPPORTED_ENCODINGS,
     SUPPORTED_MODELS,
+    SUPPORTED_TTS_LANGUAGES,
     SUPPORTED_VOICES,
+    TIMBRE_V20_VOICES,
+    TIMBRE_V25_VOICES,
     TTS_LANGUAGE_MAP,
     TTS_SUPPORTED_SAMPLE_RATES,
     get_language_string,
+    settings_language,
     stt_language_to_gnani,
     tts_language_to_gnani,
 )
 
 __all__ = [
+    "DEFAULT_MODEL",
     "GNANI_STT_REST_URL",
     "GNANI_STT_WS_URL",
     "GNANI_TTS_REST_URL",
@@ -55,10 +61,14 @@ __all__ = [
     "SUPPORTED_CONTAINERS",
     "SUPPORTED_ENCODINGS",
     "SUPPORTED_MODELS",
+    "SUPPORTED_TTS_LANGUAGES",
     "SUPPORTED_VOICES",
+    "TIMBRE_V20_VOICES",
+    "TIMBRE_V25_VOICES",
     "TTS_LANGUAGE_MAP",
     "TTS_SUPPORTED_SAMPLE_RATES",
     "get_language_string",
+    "settings_language",
     "stt_language_to_gnani",
     "tts_language_to_gnani",
 ]

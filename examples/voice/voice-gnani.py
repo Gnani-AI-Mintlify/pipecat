@@ -6,8 +6,7 @@
 
 """Voice bot with Gnani Vachana STT + TTS.
 
-Same pipeline as ``foundational/07x-interruptible-gnani.py``, placed alongside
-other provider examples under ``examples/voice/``.
+Uses REST STT (VAD-segmented) and SSE streaming TTS.
 
 Prerequisites::
 
@@ -26,10 +25,13 @@ Run::
 
     python examples/voice/voice-gnani.py -t webrtc
     # open http://localhost:7860/client
+
+Swap service classes for WebSocket variants — see ``foundational/07x-interruptible-gnani.py``.
 """
 
 import os
 
+import aiohttp
 from dotenv import load_dotenv
 from loguru import logger
 
@@ -45,7 +47,7 @@ from pipecat.processors.aggregators.llm_response_universal import (
 )
 from pipecat.runner.types import RunnerArguments
 from pipecat.runner.utils import create_transport
-from pipecat.services.gnani import GnaniSTTService, GnaniTTSService
+from pipecat.services.gnani import GnaniHttpSTTService, GnaniSSETTSService
 from pipecat.services.groq.llm import GroqLLMService
 from pipecat.transcriptions.language import Language
 from pipecat.transports.base_transport import BaseTransport, TransportParams
@@ -75,24 +77,35 @@ transport_params = {
 }
 
 
-async def run_bot(transport: BaseTransport, runner_args: RunnerArguments):
-    logger.info("Starting bot with Gnani STT + TTS")
+async def run_bot(
+    transport: BaseTransport,
+    runner_args: RunnerArguments,
+    session: aiohttp.ClientSession,
+):
+    logger.info("Starting bot with Gnani REST STT + SSE TTS")
 
     gnani_api_key = os.environ["GNANI_API_KEY"]
 
-    stt = GnaniSTTService(
+    # REST STT — transcribes VAD-segmented utterances via HTTP POST.
+    stt = GnaniHttpSTTService(
         api_key=gnani_api_key,
+        aiohttp_session=session,
         sample_rate=16000,
-        settings=GnaniSTTService.Settings(
+        settings=GnaniHttpSTTService.Settings(
             language=Language.EN_IN,
         ),
     )
 
-    tts = GnaniTTSService(
+    # SSE TTS — streams audio chunks over Server-Sent Events (lower latency than REST).
+    # timbre-v2.5: 42 voices — model and language are required.
+    tts = GnaniSSETTSService(
         api_key=gnani_api_key,
-        sample_rate=16000,
-        settings=GnaniTTSService.Settings(
-            voice="Pranav",
+        aiohttp_session=session,
+        sample_rate=22050,
+        settings=GnaniSSETTSService.Settings(
+            voice="Nalini",
+            model="timbre-v2.5",
+            language=Language.EN_IN,
         ),
     )
 
@@ -149,14 +162,6 @@ async def run_bot(transport: BaseTransport, runner_args: RunnerArguments):
         logger.info("Client disconnected")
         await worker.cancel()
 
-    @stt.event_handler("on_connected")
-    async def on_stt_connected(stt):
-        logger.debug("Gnani STT WebSocket connected")
-
-    @tts.event_handler("on_connected")
-    async def on_tts_connected(tts):
-        logger.debug("Gnani TTS WebSocket connected")
-
     runner = WorkerRunner(handle_sigint=runner_args.handle_sigint)
 
     await runner.add_workers(worker)
@@ -166,7 +171,8 @@ async def run_bot(transport: BaseTransport, runner_args: RunnerArguments):
 async def bot(runner_args: RunnerArguments):
     """Main bot entry point compatible with Pipecat Cloud."""
     transport = await create_transport(runner_args, transport_params)
-    await run_bot(transport, runner_args)
+    async with aiohttp.ClientSession() as session:
+        await run_bot(transport, runner_args, session)
 
 
 if __name__ == "__main__":

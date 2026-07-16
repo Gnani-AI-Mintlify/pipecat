@@ -4,8 +4,8 @@
 # SPDX-License-Identifier: BSD 2-Clause License
 #
 
-"""Re-export SDK header helper from the ``pipecat-gnani`` package."""
+"""Re-export SDK helpers from the ``pipecat-gnani`` package."""
 
-from pipecat_gnani._sdk import sdk_headers
+from pipecat_gnani._sdk import sdk_headers, ws_header_kwargs
 
-__all__ = ["sdk_headers"]
+__all__ = ["sdk_headers", "ws_header_kwargs"]

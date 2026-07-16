@@ -34,7 +34,7 @@ TTS / STT variants (swap imports in ``run_bot``):
 - ``GnaniSSETTSService`` — SSE streaming TTS (requires ``aiohttp_session``)
 - ``GnaniTTSService`` — WebSocket streaming TTS with interruption (default below)
 
-Voices: Pranav, Kaveri, Shubhra, Deepak
+Voices: Pranav, Kaveri, Shubhra, Deepak (timbre-v2.0); 42 voices for timbre-v2.5
 Docs: https://docs.gnani.ai/api/introduction/introduction
 """
 
@@ -104,13 +104,16 @@ async def run_bot(transport: BaseTransport, runner_args: RunnerArguments):
     )
 
     # ── TTS: WebSocket streaming (lowest latency, supports interruption) ───
-    # voice options: Pranav, Kaveri, Shubhra, Deepak
+    # timbre-v2.0 (default): Pranav, Kaveri, Shubhra, Deepak
+    # timbre-v2.5: 42 voices — set model and language in Settings (required for v2.5)
     # see https://docs.gnani.ai/api/TTS/tts-sse#available-voices
     tts = GnaniTTSService(
         api_key=gnani_api_key,
         sample_rate=16000,
         settings=GnaniTTSService.Settings(
-            voice="Pranav",
+            voice="Nalini",
+            model="timbre-v2.5",
+            language=Language.EN_IN,
         ),
     )
 

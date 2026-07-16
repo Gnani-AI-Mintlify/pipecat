@@ -15,7 +15,7 @@ Services:
 - GnaniSSETTSService — SSE streaming synthesis (lower latency)
 - GnaniTTSService — WebSocket streaming synthesis with interruption handling
 
-Voices: Pranav (default), Kaveri, Shubhra, Deepak.
+Voices: Pranav (default), Kaveri, Shubhra, Deepak for timbre-v2.0; 42 voices for timbre-v2.5.
 See https://docs.gnani.ai/api/TTS/tts-sse#available-voices
 
 API docs: https://docs.gnani.ai/api/TTS/tts-inference
